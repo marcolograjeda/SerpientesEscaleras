@@ -4,51 +4,35 @@
  * and open the template in the editor.
  */
 package serpientesescaleras;
-/*import java.util.regex.Matcher;
-import java.util.regex.Pattern;*/
-import java.util.Scanner;
-import java.util.ArrayList;
+
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author Junior
  */
 public class ejecucion {
+    jugador player = new jugador();
+    administrador admin = new administrador();
+    tablero tab = new tablero();
     public void Menu(){
-        System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Renaudar Juego.\n3 Salir.");
-        iniciarJuego();//Leer(1);
-        
+        System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Renaudar Juego.\n3 Salir.\n\n");
+        int opcion = Integer.parseInt(admin.leer(1));
+        switch(opcion){
+            case 1:
+                iniciarJuego();
+                break;
+            case 2:
+                break;
+            case 3:
+                System.exit(0);
+        }
     }
     
     public void iniciarJuego(){
-        jugadores();
-    }
-    
-    public void jugadores(){
-        System.out.println("¿Cuantos jugadores van a participar?");
-        int numeroJugadores = Integer.parseInt(leer(1));
-        ArrayList<String> nombresJugadores = new ArrayList();
-        for(int contar=1;contar<=numeroJugadores;contar++){
-            System.out.println("Ingresa el nombre del jugador");
-            nombresJugadores.add(leer(0));
-        }
-        for(int contar=0;contar<nombresJugadores.size();contar++){
-            System.out.println(nombresJugadores.get(contar));
-        }
-    }
-    
-    public String leer(int opcion){
-        Scanner scan = new Scanner(System.in);
-        String leer = scan.nextLine();
-        if(opcion==1){
-            if(leer.matches("[0-9]*")){
-                return leer;
-            }else{
-                System.out.println("Ingrese un numero");
-                leer(1);
-            }
-        }
-        return leer;       
+        player.jugadores();
+        tab.iniciarMatriz();
+        tab.llenarMatriz("escalera");
+        tab.llenarMatriz("serpiente");
     }
 }
-
-
