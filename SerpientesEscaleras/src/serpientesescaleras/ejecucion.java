@@ -33,8 +33,8 @@ public class ejecucion {
     public void iniciarJuego(){
         jugadores = player.jugadores();
         tab.iniciarMatriz();
-        /*tab.llenarMatriz("escalera");
-        tab.llenarMatriz("serpiente");*/
+        tab.llenarMatriz("escalera");
+        tab.llenarMatriz("serpiente");
         for(int jugador=0;jugador<jugadores.length;jugador++){
             Integer idJugador = jugador +1;
             tab.jugadorTablero(idJugador.toString(), 9, 9);
@@ -60,6 +60,7 @@ public class ejecucion {
         tab.imprimirMatriz();
     }
     
+    //arreglar para que escoja una opcion
     public int formasAvanzar(){
         System.out.println("¿Como desea avanzar?\n1 Con el dado\n2 Numero fijo");
         int opcion = Integer.parseInt(admin.leer(1));
