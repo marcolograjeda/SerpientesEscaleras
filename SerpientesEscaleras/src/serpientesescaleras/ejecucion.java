@@ -15,6 +15,7 @@ public class ejecucion {
     jugador player = new jugador();
     administrador admin = new administrador();
     tablero tab = new tablero();
+    String[] jugadores = new String[0];
     public void Menu(){
         System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Renaudar Juego.\n3 Salir.\n\n");
         int opcion = Integer.parseInt(admin.leer(1));
@@ -30,9 +31,56 @@ public class ejecucion {
     }
     
     public void iniciarJuego(){
-        player.jugadores();
+        jugadores = player.jugadores();
         tab.iniciarMatriz();
-        tab.llenarMatriz("escalera");
-        tab.llenarMatriz("serpiente");
+        /*tab.llenarMatriz("escalera");
+        tab.llenarMatriz("serpiente");*/
+        for(int jugador=0;jugador<jugadores.length;jugador++){
+            Integer idJugador = jugador +1;
+            tab.jugadorTablero(idJugador.toString(), 9, 9);
+        }
+        tab.imprimirMatriz();
+        int jugadorTurno = player.turnoRandom(jugadores);
+        boolean finJuego = false;
+        do{
+            juego(jugadorTurno);
+            jugadorTurno=player.manejarTurnos(jugadorTurno, jugadores);
+            finJuego = tab.finJuego();
+        }while(!finJuego);
+        System.out.println("El ganador es " + jugadores[jugadorTurno]);
+    }
+    
+    public void juego(int jugadorTurno){
+        System.out.println("Es el turno de " + jugadores[jugadorTurno] + " " +jugadorTurno);
+        int opcion = formasAvanzar();
+        String[] coordenadasXY = tab.obtenerPosicion(jugadorTurno);
+        int[] coordenadasDeTurno = admin.separadorComas(coordenadasXY);
+        int espacios = lanzamiento(opcion);
+        tab.avanzar(coordenadasDeTurno, espacios, jugadorTurno);
+        tab.imprimirMatriz();
+    }
+    
+    public int formasAvanzar(){
+        System.out.println("¿Como desea avanzar?\n1 Con el dado\n2 Numero fijo");
+        int opcion = Integer.parseInt(admin.leer(1));
+        return opcion;
+    }
+    
+    public int lanzamiento(int opcion){
+        int espacios =0;
+        switch(opcion){
+            case 1:
+                espacios = admin.dado();
+                System.out.println("Sus dados cayeron en: "+espacios);
+                break;
+            case 2:
+                System.out.println("Ingrese el numero que desea");
+                espacios = Integer.parseInt(admin.leer(1));
+                if(!(0<espacios&&espacios<100)){
+                    System.out.println("Puede escoger solamente un numero en el rango de 1 a 99");
+                    espacios = lanzamiento(2);
+                }
+        }
+        return espacios;
     }
 }

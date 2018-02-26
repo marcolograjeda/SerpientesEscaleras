@@ -20,18 +20,24 @@ public class tablero {
           Jugadores = 1,2,3*/
         System.out.println("Ingrese las cordenadas para " + tipo + ", con el formato:\nx1,y1;x2,y2;x3,y3");
         String coordenada = admin.leer(2);
-        ArrayList<String> coordenadasXY = admin.separador(coordenada);
-        ArrayList<Integer> coordenadasSeparadasXY = admin.separadorComas(coordenadasXY);
+        String[] coordenadasXY = admin.separador(coordenada);
+         
+        int[] coordenadasSeparadasXY = admin.separadorComas(coordenadasXY);
         /*for(int a=0;a<coordenadasXY.size();a++){  
             System.out.println(coordenadasXY.get(a));
         }
         for(int a=0;a<coordenadasSeparadasXY.size();a++){
             System.out.println(coordenadasSeparadasXY.get(a));
         }*/
-        for(int cordenadaX=0;cordenadaX<coordenadasSeparadasXY.size();cordenadaX++){
-            int x = coordenadasSeparadasXY.get(cordenadaX);
+        agregarES(coordenadasSeparadasXY, tipo);
+        imprimirMatriz();
+    }
+    
+    public void agregarES(int[] coordenadasSeparadasXY, String tipo){
+        for(int cordenadaX=0;cordenadaX<coordenadasSeparadasXY.length;cordenadaX++){
+            int x = coordenadasSeparadasXY[cordenadaX];
             int cordenadaY = cordenadaX + 1;
-            int y = coordenadasSeparadasXY.get(cordenadaY);
+            int y = coordenadasSeparadasXY[cordenadaY];
             if(x==0&&tipo.equals("escalera")){
                 System.out.println("No se puede colocar escalera en: "+(10-x)+", "+(10-y));
             }else if(matriz[x][y].equals("0")&&tipo.equals("escalera")){
@@ -47,16 +53,33 @@ public class tablero {
             }
             cordenadaX += 1;
         }
-        imprimirMatriz();
     }
 
     public void imprimirMatriz(){
         for(int a=0;a<10;a++){
+            System.out.println("-----------------------------------------------------------------------");
             for(int b=0;b<10;b++){
-                System.out.print(matriz[a][b]);
+                String casilla= matriz[a][b];
+                switch(casilla){
+                    case "0":
+                        System.out.print("|");
+                        for(int veces=0;veces<=5;veces++){
+                            System.out.print(" ");
+                        }
+                        break;
+                    default:
+                        System.out.print("|");
+                        System.out.print(matriz[a][b]);
+                        for(int veces=matriz[a][b].length();veces<=5;veces++){
+                            System.out.print(" ");
+                        }
+                        break;
+                }
+                
             }
-            System.out.println();
+            System.out.print("|\n");
         }
+        System.out.println("-----------------------------------------------------------------------");
     }
     
     public void iniciarMatriz(){
@@ -71,5 +94,132 @@ public class tablero {
                 }
             }
         }
+    }
+    
+    public void jugadorTablero(String jugador, int x, int y){
+        matriz[x][y]= matriz[x][y]+","+jugador;
+    }
+    
+    public String[] obtenerPosicion(int turno){
+        String turnoDelJugador = Integer.toString(turno+1);
+        String[] coordenada = new String[1];
+        //String match = "["+turnoDelJugador+"]";
+        for(int x=0;x<matriz.length;x++){
+            for(int y=0;y<matriz[0].length;y++){
+                String[] separacion = matriz[x][y].split(",");
+                for(int po=0;po<separacion.length;po++){
+                    if(separacion[po].equals(Integer.toString(turno+1))){
+                       coordenada[0] = Integer.toString(x) + ","+ Integer.toString(y);
+                       return coordenada;
+                    }
+                }
+            }
+        }
+        return coordenada;
+    }
+    
+    public void avanzar(int[] coordenadasDeTurno, int espacios, int jugadorTurno){
+        boolean casillaVacia = true;
+        int[] coordenadasXY = new int[2];
+        //aqui tiene 1,1 por eso dice vacia true
+        if(10-coordenadasDeTurno[1]-espacios<0 && coordenadasDeTurno[0]==10){
+            matriz[0][0] = matriz[0][0]+","+Integer.toString(jugadorTurno+1);
+            borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
+        }else if(10-coordenadasDeTurno[1]-espacios<0){
+            int nuevaY = 10-Math.abs(10-coordenadasDeTurno[1]-espacios);
+            int nuevaX = 10-(coordenadasDeTurno[0]+1);
+            int fila = 1;
+            while(nuevaY<0){
+                if (nuevaX>0){
+                    nuevaX = nuevaX-fila;
+                    nuevaY = 10+nuevaY;
+                }else{
+                    nuevaX = 0;
+                    nuevaY = 0;
+                }
+            }/*
+            if(nuevaY<0){
+                
+            }*/
+            coordenadasXY[0]=nuevaX;
+            coordenadasXY[1]=nuevaY;
+            casillaVacia = casillaVacia(coordenadasXY);
+            if(casillaVacia){
+                matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
+            }else{
+                matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+            }
+            borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
+        }else{
+            int nuevaX = 10-coordenadasDeTurno[0];
+            int nuevaY = Math.abs(10-coordenadasDeTurno[1]-espacios);
+            coordenadasXY[0]=nuevaX;
+            coordenadasXY[1]=nuevaY;
+            casillaVacia = casillaVacia(coordenadasXY);
+            if(casillaVacia){
+                matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
+            }else{
+                matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+            }
+            //reemplazar(casillaVacia, nuevaX, nuevaY, jugadorTurno);
+            borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
+        }
+        /*else{
+            if(9-espacios<0){
+                int nuevaX = 10-(coordenadasDeTurno[0]+1);
+                int nuevaY = 10-Math.abs(10-coordenadasDeTurno[1]-espacios);
+                //nuevaY = nuevaY-;
+                matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+                borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno, casillaVacia);
+            }else{
+                int nuevaX = 10-coordenadasDeTurno[0];
+                int nuevaY = Math.abs(10-coordenadasDeTurno[1]-espacios);
+                matriz[nuevaX][nuevaY]= matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+                borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno, casillaVacia);
+            }
+        }*/
+    }
+    
+    public boolean casillaVacia(int[] coordenadasXY){
+        boolean casillaVacia = false;
+        /*int x = coordenadasXY[0];
+        int y = coordenadasXY[1];*/
+        if(matriz[coordenadasXY[0]][coordenadasXY[1]].equals("0")){
+           casillaVacia = true;
+        }
+        return casillaVacia;
+    }
+    
+    public void borrarPosicionAnterior(int[] coordenadasDeTurno, int turno){
+        coordenadasDeTurno[0]=10-coordenadasDeTurno[0];
+        coordenadasDeTurno[1]=10-coordenadasDeTurno[1];
+        boolean casillaVacia = casillaVacia(coordenadasDeTurno);
+        String casilla = "";
+        if(casillaVacia){
+            matriz[10-coordenadasDeTurno[0]][10-coordenadasDeTurno[1]]="0";
+        }else{
+            String[] separacion = matriz[coordenadasDeTurno[0]][coordenadasDeTurno[1]].split(",");
+            for(int po=0;po<separacion.length;po++){
+                if(separacion[po].equals(Integer.toString(turno+1))){
+                    separacion[po]="0";
+                }
+                if(!separacion[po].equals("0")){
+                    if (casilla.length()>0){
+                        casilla = casilla+","+separacion[po];
+                    }else{
+                        casilla=separacion[po];
+                    }
+                }
+            }
+            matriz[coordenadasDeTurno[0]][coordenadasDeTurno[1]]=casilla;
+        }
+    }
+    
+    public boolean finJuego(){
+        boolean fin = false;
+        if(matriz[0][0].length()>1){
+            fin = true;
+        }
+        return fin;
     }
 }
