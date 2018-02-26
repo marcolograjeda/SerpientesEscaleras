@@ -22,15 +22,10 @@ public class jugador {
             jugadores();
         }
         String[] nombresJugadores = new String[numeroJugadores];
-        //String[] nombresJugadores = new String[numeroJugadores];
-        //ArrayList<String> nombresJugadores = new ArrayList();
         for(int contar=0;contar<numeroJugadores;contar++){
             System.out.println("Ingresa el nombre del jugador");
             nombresJugadores[contar]= admin.leer(0);
         }
-        /*for(int contar=0;contar<nombresJugadores.length;contar++){
-            System.out.println(nombresJugadores[contar]);
-        }*/
         return nombresJugadores;
     }
     
@@ -56,6 +51,7 @@ public class jugador {
                     break;
                 case 1:
                     turno++;
+                    break;
                 case 2:
                     turno=0;
                     break;

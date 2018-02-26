@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class tablero {
     administrador admin = new administrador();
     String matriz[][] = new String [10][10];
-    public void llenarMatriz(String tipo){
+    public boolean llenarMatriz(String tipo){
         administrador admin = new administrador();
         /*Escaleras = 4
           Serpientes = 5
@@ -21,49 +21,54 @@ public class tablero {
         System.out.println("Ingrese las cordenadas para " + tipo + ", con el formato:\nx1,y1;x2,y2;x3,y3");
         String coordenada = admin.leer(2);
         String[] coordenadasXY = admin.separador(coordenada);
-         
         int[] coordenadasSeparadasXY = admin.separadorComas(coordenadasXY);
-        /*for(int a=0;a<coordenadasXY.size();a++){  
-            System.out.println(coordenadasXY.get(a));
-        }
-        for(int a=0;a<coordenadasSeparadasXY.size();a++){
-            System.out.println(coordenadasSeparadasXY.get(a));
-        }*/
-        agregarES(coordenadasSeparadasXY, tipo);
-        //imprimirMatriz();
+        boolean malaPosicion = agregarES(coordenadasSeparadasXY, tipo);
+        return malaPosicion;
     }
     
-    public void agregarES(int[] coordenadasSeparadasXY, String tipo){
+    public boolean agregarES(int[] coordenadasSeparadasXY, String tipo){
+        boolean malaPosicion = false;
         for(int cordenadaX=0;cordenadaX<coordenadasSeparadasXY.length;cordenadaX++){
             int x = coordenadasSeparadasXY[cordenadaX];
             int cordenadaY = cordenadaX + 1;
             int y = coordenadasSeparadasXY[cordenadaY];
             if(x==0&&tipo.equals("escalera")){
                 System.out.println("No se puede colocar escalera en: "+(10-x)+", "+(10-y));
+                malaPosicion = true;
             }else if(matriz[x][y].equals("0")&&tipo.equals("escalera")){
                 matriz[x][y]="4";
             }else if(tipo.equals("escalera")){
                 System.out.println("No se puede colocar escalera en: "+(10-x)+", "+(10-y));
+                malaPosicion = true;
             }else if(x==9&&tipo.equals("serpiente")){
                 System.out.println("No se puede colocar serpiente en: "+(10-x)+", "+(10-y));
+                malaPosicion = true;
             }else if(matriz[x][y].equals("0")&&tipo.equals("serpiente")){
-                matriz[x][y]="5";
+                if(matriz[x+1][y].equals("4")){
+                    System.out.println("No se puede colocar una serpiente sobre una escalera: "+ (10-x)+", "+(10-y));
+                    malaPosicion = true;
+                }else{
+                    matriz[x][y]="5";
+                }
+                
             }else if(tipo.equals("serpiente")){
                 System.out.println("No se puede colocar serpiente en: "+(10-x)+", "+(10-y));
+                malaPosicion = true;
             }
             cordenadaX += 1;
         }
+        return malaPosicion;
     }
 
     public void imprimirMatriz(){
         for(int a=0;a<10;a++){
-            System.out.println("-----------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------");
             for(int b=0;b<10;b++){
                 String casilla= matriz[a][b];
                 switch(casilla){
                     case "0":
                         System.out.print("|");
-                        for(int veces=0;veces<=5;veces++){
+                        for(int veces=0;veces<=7;veces++){
                             System.out.print(" ");
                         }
                         break;
@@ -77,7 +82,7 @@ public class tablero {
                             System.out.print(matriz[a][b]);
                         }
                         
-                        for(int veces=matriz[a][b].length();veces<=5;veces++){
+                        for(int veces=matriz[a][b].length();veces<=7;veces++){
                             System.out.print(" ");
                         }
                         break;
@@ -86,7 +91,7 @@ public class tablero {
             }
             System.out.print("|\n");
         }
-        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------");
     }
     
     public void iniciarMatriz(){
@@ -110,7 +115,6 @@ public class tablero {
     public String[] obtenerPosicion(int turno){
         String turnoDelJugador = Integer.toString(turno+1);
         String[] coordenada = new String[1];
-        //String match = "["+turnoDelJugador+"]";
         for(int x=0;x<matriz.length;x++){
             for(int y=0;y<matriz[0].length;y++){
                 String[] separacion = matriz[x][y].split(",");
@@ -147,24 +151,6 @@ public class tablero {
             coordenadasXY[0]=nuevaX;
             coordenadasXY[1]=nuevaY;
             cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
-            /*casillaVacia = casillaVacia(coordenadasXY);
-            if(casillaVacia){
-                matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-            }else{
-                int tipo = verificarContenidoCasilla(nuevaX,nuevaY);
-                switch(tipo){
-                    case 4:
-                        nuevaX--;
-                        matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-                        break;
-                    case 5:
-                        nuevaX++;
-                        matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-                        break;
-                    default:
-                        matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
-                }
-            }*/
             borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
         }else{
             int nuevaX = 10-coordenadasDeTurno[0];
@@ -172,32 +158,12 @@ public class tablero {
             coordenadasXY[0]=nuevaX;
             coordenadasXY[1]=nuevaY;
             cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
-            /*casillaVacia = casillaVacia(coordenadasXY);
-            if(casillaVacia){
-                matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-            }else{
-                int tipo = verificarContenidoCasilla(nuevaX,nuevaY);
-                switch(tipo){
-                    case 4:
-                        nuevaX--;
-                        matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-                        break;
-                    case 5:
-                        nuevaX++;
-                        matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
-                        break;
-                    default:
-                        matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
-                }
-            }*/
             borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
         }
     }
     
     public boolean casillaVacia(int[] coordenadasXY){
         boolean casillaVacia = false;
-        /*int x = coordenadasXY[0];
-        int y = coordenadasXY[1];*/
         if(matriz[coordenadasXY[0]][coordenadasXY[1]].equals("0")){
            casillaVacia = true;
         }
@@ -208,7 +174,7 @@ public class tablero {
         coordenadasDeTurno[0]=10-coordenadasDeTurno[0];
         coordenadasDeTurno[1]=10-coordenadasDeTurno[1];
         boolean casillaVacia = casillaVacia(coordenadasDeTurno);
-        String casilla = "";
+        String casilla = "0";
         if(casillaVacia){
             matriz[10-coordenadasDeTurno[0]][10-coordenadasDeTurno[1]]="0";
         }else{
@@ -218,7 +184,7 @@ public class tablero {
                     separacion[po]="0";
                 }
                 if(!separacion[po].equals("0")){
-                    if (casilla.length()>0){
+                    if (casilla.equals("0")){
                         casilla = casilla+","+separacion[po];
                     }else{
                         casilla=separacion[po];

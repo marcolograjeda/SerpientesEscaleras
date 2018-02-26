@@ -30,24 +30,12 @@ public class administrador {
                 }
                 break;
         }
-        /*if(opcion==1){
-            if(leer.matches("[0-9]*")){
-                return leer;
-            }else{
-                System.out.println("Ingrese un numero");
-                leer(1);
-            }
-        }else if(opcion==2){
-            
-        }
-              */
         return leer;
     }
     
-    public String[] separador(String cadena/*, String caracter*/){
-        StringTokenizer token = new StringTokenizer(cadena, ";"/*, caracter*/);
+    public String[] separador(String cadena){
+        StringTokenizer token = new StringTokenizer(cadena, ";");
         int contadorCoordenadas = token.countTokens();
-        //ArrayList<String> coordenadas = new ArrayList();
         String[] coordenadas = new String[contadorCoordenadas];
         for(int contar = 0;contar<contadorCoordenadas;contar++){
             coordenadas[contar] = token.nextToken();
@@ -56,9 +44,7 @@ public class administrador {
     }
     
     public int[] separadorComas(String[] coordenada){
-        //ArrayList<Integer> coordenadasSeparadasXY = new ArrayList();
         int[] coordenadasSeparadasXY = new int[(coordenada.length*2)];
-        //String[] coordenadasSeparadasXY = new
         int posicionVector = 0;
         for(int cadena=0;cadena<coordenada.length;cadena++){
             StringTokenizer token = new StringTokenizer(coordenada[cadena], ",");

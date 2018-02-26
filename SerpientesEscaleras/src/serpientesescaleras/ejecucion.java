@@ -33,8 +33,44 @@ public class ejecucion {
     public void iniciarJuego(){
         jugadores = player.jugadores();
         tab.iniciarMatriz();
-        tab.llenarMatriz("escalera");
-        tab.llenarMatriz("serpiente");
+        boolean problema = false;
+        boolean repetir = false;
+        /*do{
+            problema = tab.llenarMatriz("escalera");
+            if(problema){
+                System.out.println("Hubo una o más escaleras con problemas, ¿desea ingresar más escaleras?\n1. Si\n2. No");
+                int opcion = Integer.parseInt(admin.leer(1));
+                switch(opcion){
+                    case 1:
+                        repetir = true;
+                        break;
+                    case 2:
+                        repetir = false;
+                        break;
+                    default: 
+                        System.out.println("No escogiste ninguna opcion.");
+                        repetir = false;
+                }   
+            }
+        }while(repetir);
+        do{
+            problema = tab.llenarMatriz("serpiente");
+            if(problema){
+                System.out.println("Hubo una o más escaleras con problemas, ¿desea ingresar más escaleras?\n1. Si\n2. No");
+                int opcion = Integer.parseInt(admin.leer(1));
+                switch(opcion){
+                    case 1:
+                        repetir = true;
+                        break;
+                    case 2:
+                        repetir = false;
+                        break;
+                    default: 
+                        System.out.println("No escogiste ninguna opcion.");
+                        repetir = false;
+                }   
+            }
+        }while(repetir);*/
         for(int jugador=0;jugador<jugadores.length;jugador++){
             Integer idJugador = jugador +1;
             tab.jugadorTablero(idJugador.toString(), 9, 9);
