@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package serpientesescaleras;
-import java.util.ArrayList;
 /**
  *
  * @author Junior
@@ -21,7 +20,7 @@ public class tablero {
         System.out.println("Ingrese las cordenadas para " + tipo + ", con el formato:\nx1,y1;x2,y2;x3,y3");
         String coordenada = admin.leer(2);
         String[] coordenadasXY = admin.separador(coordenada);
-        int[] coordenadasSeparadasXY = admin.separadorComas(coordenadasXY);
+        int[] coordenadasSeparadasXY = admin.separadorComas(coordenadasXY, 2);
         boolean malaPosicion = agregarES(coordenadasSeparadasXY, tipo);
         return malaPosicion;
     }
@@ -33,26 +32,26 @@ public class tablero {
             int cordenadaY = cordenadaX + 1;
             int y = coordenadasSeparadasXY[cordenadaY];
             if(x==0&&tipo.equals("escalera")){
-                System.out.println("No se puede colocar escalera en: "+(10-x)+", "+(10-y));
+                System.out.println("No se puede colocar escalera en: "+(x)+", "+(y));
                 malaPosicion = true;
             }else if(matriz[x][y].equals("0")&&tipo.equals("escalera")){
                 matriz[x][y]="4";
             }else if(tipo.equals("escalera")){
-                System.out.println("No se puede colocar escalera en: "+(10-x)+", "+(10-y));
+                System.out.println("No se puede colocar escalera en: "+(x)+", "+(y));
                 malaPosicion = true;
             }else if(x==9&&tipo.equals("serpiente")){
-                System.out.println("No se puede colocar serpiente en: "+(10-x)+", "+(10-y));
+                System.out.println("No se puede colocar serpiente en: "+(x)+", "+(y));
                 malaPosicion = true;
             }else if(matriz[x][y].equals("0")&&tipo.equals("serpiente")){
                 if(matriz[x+1][y].equals("4")){
-                    System.out.println("No se puede colocar una serpiente sobre una escalera: "+ (10-x)+", "+(10-y));
+                    System.out.println("No se puede colocar una serpiente sobre una escalera: "+ (x)+", "+(y));
                     malaPosicion = true;
                 }else{
                     matriz[x][y]="5";
                 }
                 
             }else if(tipo.equals("serpiente")){
-                System.out.println("No se puede colocar serpiente en: "+(10-x)+", "+(10-y));
+                System.out.println("No se puede colocar serpiente en: "+(x)+", "+(y));
                 malaPosicion = true;
             }
             cordenadaX += 1;
@@ -62,7 +61,7 @@ public class tablero {
 
     public void imprimirMatriz(){
         for(int a=0;a<10;a++){
-            System.out.println("------------------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------------------------");
             for(int b=0;b<10;b++){
                 String casilla= matriz[a][b];
                 switch(casilla){
@@ -91,7 +90,7 @@ public class tablero {
             }
             System.out.print("|\n");
         }
-        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------------");
     }
     
     public void iniciarMatriz(){
@@ -184,7 +183,7 @@ public class tablero {
                     separacion[po]="0";
                 }
                 if(!separacion[po].equals("0")){
-                    if (casilla.equals("0")){
+                    if (!casilla.equals("0")){
                         casilla = casilla+","+separacion[po];
                     }else{
                         casilla=separacion[po];

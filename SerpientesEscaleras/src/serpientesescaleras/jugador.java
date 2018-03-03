@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package serpientesescaleras;
-import java.util.ArrayList;
+//import java.util.Random;
 /**
  *
  * @author Junior
@@ -12,15 +12,7 @@ import java.util.ArrayList;
 public class jugador {
     administrador admin = new administrador();
     public String[] jugadores(){
-        System.out.println("¿Cuantos jugadores van a participar?");
-        int numeroJugadores = Integer.parseInt(admin.leer(1));
-        if(numeroJugadores>3){
-            System.out.println("El maximo es de 3 jugadores");
-            jugadores();
-        }else if(numeroJugadores<2){
-            System.out.println("El minimo de jugadores es de 2");
-            jugadores();
-        }
+        int numeroJugadores = numeroJugadores();
         String[] nombresJugadores = new String[numeroJugadores];
         for(int contar=0;contar<numeroJugadores;contar++){
             System.out.println("Ingresa el nombre del jugador");
@@ -29,12 +21,24 @@ public class jugador {
         return nombresJugadores;
     }
     
-    public int turnoRandom(String[] jugadores){
+    /*public int turnoRandom(String[] jugadores){
         int posicion = (int)(Math.random()*jugadores.length);
+        if(jugadores[posicion].equals("")){
+            posicion = turnoRandom(jugadores);
+        }
         return posicion; 
-    }
+    }*/
     
-    public int manejarTurnos(int turno,String[] jugadores){
+    public String[] turnoRandom(String[] jugadores){
+        for(int a=0; a<jugadores.length;a++){
+            int posicionRandom = (int)(Math.random()*jugadores.length);
+            String temporal = jugadores[a];
+            jugadores[a]=jugadores[posicionRandom];
+            jugadores[posicionRandom]=temporal;
+        }
+        return jugadores;
+    }
+    public int manejarTurnos(int turno, String[] jugadores){
         if(jugadores.length==2){
             switch(turno){
                 case 0:
@@ -58,5 +62,18 @@ public class jugador {
             }
         }
         return turno;
+    }
+    
+    public int numeroJugadores(){
+        System.out.println("¿Cuantos jugadores van a participar?");
+        int numeroJugadores = Integer.parseInt(admin.leer(1));
+        if(numeroJugadores>3){
+            System.out.println("El maximo es de 3 jugadores");
+            numeroJugadores = numeroJugadores();
+        }else if(numeroJugadores<2){
+            System.out.println("El minimo de jugadores es de 2");
+            numeroJugadores = numeroJugadores();
+        }
+        return numeroJugadores;
     }
 }

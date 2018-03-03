@@ -18,15 +18,31 @@ public class administrador {
         String leer = scan.nextLine();
         switch(opcion){
             case 1:
-                if(!leer.matches("[0-9]*")){
+                if(!leer.matches("[0-9]*")/*||leer.equals("")*/){
                     System.out.println("Ingrese un numero");
                     leer=leer(1);
+                }else if(leer.equals("")){
+                    
                 }
                 break;
             case 2:
-                if(!leer.matches("[[0-9],[0-9];]+")){
+                if(!leer.matches("^([0-9],[0-9];?)+$")||leer.equals("")){
                     System.out.println("Ingrese los datos en el formato indicado, solo numeros");
                     leer=leer(2);
+                }
+                break;
+            case 3:
+                if((!leer.equals("1"))/*||(!leer.equals("2"))||!leer.equals("f")||!leer.equals("F")*/){
+                    if((!leer.equals("2"))){
+                        if((!leer.equals("f"))){
+                            if((!leer.equals("F"))){
+                                if(!(leer.equals(""))){
+                                    System.out.println("Ingrese una de las opciones anteriores");
+                                    leer=leer(3);
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
         }
@@ -43,16 +59,30 @@ public class administrador {
         return coordenadas;
     }
     
-    public int[] separadorComas(String[] coordenada){
+    public int[] separadorComas(String[] coordenada, int opcion){
         int[] coordenadasSeparadasXY = new int[(coordenada.length*2)];
         int posicionVector = 0;
-        for(int cadena=0;cadena<coordenada.length;cadena++){
-            StringTokenizer token = new StringTokenizer(coordenada[cadena], ",");
-            int contadorCoordenadas = token.countTokens();
-            for(int contar = 0;contar<contadorCoordenadas;contar++){
-                coordenadasSeparadasXY[posicionVector] = (10-Integer.parseInt(token.nextToken()));
-                posicionVector++;
-            }
+        switch(opcion){
+            case 1:
+                for(int cadena=0;cadena<coordenada.length;cadena++){
+                    StringTokenizer token = new StringTokenizer(coordenada[cadena], ",");
+                    int contadorCoordenadas = token.countTokens();
+                    for(int contar = 0;contar<contadorCoordenadas;contar++){
+                        coordenadasSeparadasXY[posicionVector] = (10-Integer.parseInt(token.nextToken()));
+                        posicionVector++;
+                    }
+                }
+                break;
+            case 2:
+                for(int cadena=0;cadena<coordenada.length;cadena++){
+                    StringTokenizer token = new StringTokenizer(coordenada[cadena], ",");
+                    int contadorCoordenadas = token.countTokens();
+                    for(int contar = 0;contar<contadorCoordenadas;contar++){
+                        coordenadasSeparadasXY[posicionVector] = (Integer.parseInt(token.nextToken()));
+                        posicionVector++;
+                    }
+                }
+                break;
         }
         return coordenadasSeparadasXY;
     }
