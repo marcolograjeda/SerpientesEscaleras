@@ -6,7 +6,6 @@
 package serpientesescaleras;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.ArrayList;
 /**
  *
  * @author Junior
@@ -18,16 +17,14 @@ public class administrador {
         String leer = scan.nextLine();
         switch(opcion){
             case 1:
-                if(!leer.matches("[0-9]*")/*||leer.equals("")*/){
-                    System.out.println("Ingrese un numero");
+                if(!leer.matches("[0-9]*")||leer.equals("")){
+                    System.out.println("Ingrese un numero entero positivo");
                     leer=leer(1);
-                }else if(leer.equals("")){
-                    
                 }
                 break;
             case 2:
                 if(!leer.matches("^([0-9],[0-9];?)+$")||leer.equals("")){
-                    System.out.println("Ingrese los datos en el formato indicado, solo numeros");
+                    System.out.println("Ingrese los datos en el formato indicado, solo numeros enteros en el rango 0 y 9");
                     leer=leer(2);
                 }
                 break;
@@ -36,12 +33,20 @@ public class administrador {
                     if((!leer.equals("2"))){
                         if((!leer.equals("f"))){
                             if((!leer.equals("F"))){
-                                if(!(leer.equals(""))){
+                                if(!(leer.equals("p"))){
                                     System.out.println("Ingrese una de las opciones anteriores");
                                     leer=leer(3);
                                 }
                             }
                         }
+                    }
+                }
+                break;
+            case 4:
+                if((!leer.equals("f"))){
+                    if(!leer.equals("p")){
+                        System.out.println("Ingrese una de las opciones anteriores");
+                        leer=leer(4);
                     }
                 }
                 break;

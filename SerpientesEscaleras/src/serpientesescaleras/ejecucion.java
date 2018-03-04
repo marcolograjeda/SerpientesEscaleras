@@ -24,6 +24,15 @@ public class ejecucion {
                 iniciarJuego();
                 break;
             case 2:
+                if(jugadores.length==0){
+                    System.out.println("No hay un juego iniciado\n");
+                    Menu();
+                }else{
+                    if(tab.finJuego()){
+                        System.out.println("El juego anterior finalizó");
+                        Menu();
+                    }
+                }
                 break;
             case 3:
                 System.exit(0);
@@ -33,55 +42,14 @@ public class ejecucion {
     
     public void iniciarJuego(){
         jugadores = player.jugadores();
-        //jugadores = jugadores;
         tab.iniciarMatriz();
         if (ronda!=0){
             ronda =0;
         }
         boolean problema = false;
         boolean repetir = false;
-        repetirCoordenadas("escalera", false, false);
         repetirCoordenadas("serpiente", false, false);
-        /*do{
-            problema = tab.llenarMatriz("escalera");
-            if(problema){
-                System.out.println("Hubo una o más escaleras con problemas, ¿desea ingresar más escaleras?\n1. Si\n2. No");
-                int opcion = Integer.parseInt(admin.leer(1));
-                switch(opcion){
-                    case 1:
-                        repetir = true;
-                        break;
-                    case 2:
-                        repetir = false;
-                        break;
-                    default: 
-                        System.out.println("No escogiste ninguna opcion.");
-                        repetir = false;
-                }   
-            }else{
-                repetir = false;
-            }
-        }while(repetir);
-        /*
-        do{
-            problema = tab.llenarMatriz("serpiente");
-            if(problema){
-                System.out.println("Hubo una o más serpientes con problemas, ¿desea ingresar más escaleras?\n1. Si\n2. No");
-                int opcion = Integer.parseInt(admin.leer(1));
-                switch(opcion){
-                    case 1:
-                        repetir = true;
-                        break;
-                    case 2:
-                        repetir = false;
-                        break;
-                    default: 
-                        System.out.println("No escogiste ninguna opcion.");
-                        repetir = false;
-                }   
-            }
-        }while(repetir);*/
-        //int jugadorTurno = player.turnoRandom(jugadores);
+        repetirCoordenadas("escalera", false, false);
         jugadores = player.turnoRandom(jugadores);
         System.out.println("El orden del juego va ser");
         for(int jug=0;jug<jugadores.length;jug++){
@@ -92,7 +60,9 @@ public class ejecucion {
             Integer idJugador = jugador +1;
             tab.jugadorTablero(idJugador.toString(), 9, 9);
         }
+        System.out.println("Este es el tablero del juego (Presione enter para avanzar)");
         tab.imprimirMatriz();
+        admin.leer(5);
         boolean finJuego = false;
         do{
             ronda = contarRonda(jugadorTurno, ronda);
@@ -102,7 +72,7 @@ public class ejecucion {
                 jugadorTurno=player.manejarTurnos(jugadorTurno, jugadores);
             }
         }while(!finJuego);
-        System.out.println("El ganador es " + jugadores[jugadorTurno]);
+        System.out.println("El ganador es " + jugadores[jugadorTurno]+"\n\n");
         Menu();
     }
     
@@ -111,10 +81,9 @@ public class ejecucion {
         tab.imprimirMatriz();
         String opcion = formasAvanzar();
         int escogio =0;
-        if(opcion.equals("")){
+        if(opcion.equals("p")){
             escogio = Menu();
             juego(jugadorTurno);
-            
         }else if(!(opcion.equals("f"))/*||(!(opcion.equals("F")))*/){
             if((!(opcion.equals("F")))){
                 String[] coordenadasXY = tab.obtenerPosicion(jugadorTurno);
@@ -122,12 +91,20 @@ public class ejecucion {
                 int espacios = lanzamiento(Integer.parseInt(opcion));
                 tab.avanzar(coordenadasDeTurno, espacios, jugadorTurno);
                 tab.imprimirMatriz();
+                boolean finJuego = tab.finJuego();
+                if(finJuego==false){
+                    System.out.println("Si desea finalizar su turno ingrese f\nSi desea pausar el juego presione p");
+                    if(admin.leer(4).equals("p")){
+                        Menu();
+                    }   
+                }
             }
         }
     }
     
     public String formasAvanzar(){
-        System.out.println("¿Como desea avanzar?\n1 Con el dado\n2 Numero fijo              Ingrese f para finalizar su turno");
+        System.out.println("¿Como desea avanzar?\n1 Con el dado              (Ingrese p para ir al menu o pausar el juego)"
+                +"\n2 Numero fijo              (Ingrese f para finalizar su turno)");
         String opcion = admin.leer(3);
         return opcion;
     }

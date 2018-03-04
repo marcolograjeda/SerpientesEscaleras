@@ -18,7 +18,5 @@ public class main {
         System.out.println("¡Bienvenido!");
         ejecucion ejec = new ejecucion();
         ejec.Menu();
-        //int numero = Integer.parseInt(ejc.leer(1));
-        //System.out.println(numero);
     }    
 }

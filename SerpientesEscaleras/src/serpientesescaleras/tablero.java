@@ -131,12 +131,13 @@ public class tablero {
     public void avanzar(int[] coordenadasDeTurno, int espacios, int jugadorTurno){
         boolean casillaVacia = true;
         int[] coordenadasXY = new int[2];
-        if(10-coordenadasDeTurno[1]-espacios<0 && coordenadasDeTurno[0]==10){
-            matriz[0][0] = matriz[0][0]+","+Integer.toString(jugadorTurno+1);
-            borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
-        }else if(10-coordenadasDeTurno[1]-espacios<0){
+            if(10-coordenadasDeTurno[1]-espacios<0){
             int nuevaY = 10-Math.abs(10-coordenadasDeTurno[1]-espacios);
             int nuevaX = 10-(coordenadasDeTurno[0]+1);
+            if(nuevaX<0){
+                nuevaX = 0;
+                nuevaY = 0;
+            }
             int fila = 1;
             while(nuevaY<0){
                 if (nuevaX>0){
@@ -149,8 +150,18 @@ public class tablero {
             }
             coordenadasXY[0]=nuevaX;
             coordenadasXY[1]=nuevaY;
-            cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
-            borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
+            boolean cambioPosicion = true;
+            boolean mismaCasilla = false;
+            mismaCasilla = cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
+            if(mismaCasilla){
+                nuevaX++;
+            }
+            if((10-coordenadasDeTurno[0])==nuevaX&&(10-coordenadasDeTurno[1])!=nuevaY){
+               cambioPosicion = false;
+            }
+            if(mismaCasilla==false){
+                    borrarPosicionAnterior(coordenadasDeTurno, jugadorTurno);
+            }
         }else{
             int nuevaX = 10-coordenadasDeTurno[0];
             int nuevaY = Math.abs(10-coordenadasDeTurno[1]-espacios);
@@ -212,7 +223,8 @@ public class tablero {
         return contenido;
     }
     
-    public void cambio(int[] coordenadasXY, int nuevaX, int nuevaY, int jugadorTurno){
+    public boolean cambio(int[] coordenadasXY, int nuevaX, int nuevaY, int jugadorTurno){
+        boolean mismaCasilla = false;
         boolean casillaVacia = casillaVacia(coordenadasXY);
         if(casillaVacia){
             matriz[nuevaX][nuevaY] = Integer.toString(jugadorTurno+1);
@@ -227,11 +239,20 @@ public class tablero {
                 case 5:
                     nuevaX++;
                     coordenadasXY[0]=nuevaX;
-                    cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
+                    mismaCasilla =cambio(coordenadasXY, nuevaX, nuevaY, jugadorTurno);
                     break;
                 default:
-                    matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+                    String[] separacion = matriz[nuevaX][nuevaY].split(",");
+                    for(int po=0;po<separacion.length;po++){
+                        if(separacion[po].equals(Integer.toString(jugadorTurno+1))){
+                            mismaCasilla=true;
+                        }
+                    }
+                    if(mismaCasilla==false){
+                        matriz[nuevaX][nuevaY] = matriz[nuevaX][nuevaY]+","+Integer.toString(jugadorTurno+1);
+                    }
             }
         }
+        return mismaCasilla;
     }
 }

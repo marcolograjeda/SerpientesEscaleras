@@ -21,14 +21,6 @@ public class jugador {
         return nombresJugadores;
     }
     
-    /*public int turnoRandom(String[] jugadores){
-        int posicion = (int)(Math.random()*jugadores.length);
-        if(jugadores[posicion].equals("")){
-            posicion = turnoRandom(jugadores);
-        }
-        return posicion; 
-    }*/
-    
     public String[] turnoRandom(String[] jugadores){
         for(int a=0; a<jugadores.length;a++){
             int posicionRandom = (int)(Math.random()*jugadores.length);
