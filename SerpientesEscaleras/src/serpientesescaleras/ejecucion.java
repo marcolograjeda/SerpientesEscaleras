@@ -18,7 +18,7 @@ public class ejecucion {
     
     //El menu principal del juego
     public int Menu(){
-        System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Renaudar Juego.\n3 Salir.\n\n");
+        System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Reanudar Juego.\n3 Salir.\n\n");
         int opcion = Integer.parseInt(admin.leer(1));
         switch(opcion){
             case 1:
