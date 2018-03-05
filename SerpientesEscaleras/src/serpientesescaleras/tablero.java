@@ -11,6 +11,8 @@ package serpientesescaleras;
 public class tablero {
     administrador admin = new administrador();
     String matriz[][] = new String [10][10];
+    
+    //Metodo que sirve para pedir las coordenadas de las serpientes y las escaleras
     public boolean llenarMatriz(String tipo){
         administrador admin = new administrador();
         /*Escaleras = 4
@@ -25,6 +27,7 @@ public class tablero {
         return malaPosicion;
     }
     
+    //Agrega las serpientes y escaleras al tablero, verifica que la casilla este habilitada para eso
     public boolean agregarES(int[] coordenadasSeparadasXY, String tipo){
         boolean malaPosicion = false;
         for(int cordenadaX=0;cordenadaX<coordenadasSeparadasXY.length;cordenadaX++){
@@ -59,6 +62,7 @@ public class tablero {
         return malaPosicion;
     }
 
+    //Muestra la matriz
     public void imprimirMatriz(){
         for(int a=0;a<10;a++){
             System.out.println("-------------------------------------------------------------------------------------------");
@@ -93,6 +97,7 @@ public class tablero {
         System.out.println("-------------------------------------------------------------------------------------------");
     }
     
+    //Llena la matriz logica que es la base del juego
     public void iniciarMatriz(){
         for(int a=0;a<10;a++){
             for(int b=0;b<10;b++){
@@ -107,10 +112,12 @@ public class tablero {
         }
     }
     
+    //Situa a los jugadores en el inicio
     public void jugadorTablero(String jugador, int x, int y){
         matriz[x][y]= matriz[x][y]+","+jugador;
     }
     
+    //Devuelve la posicion del jugador que esta en el turno
     public String[] obtenerPosicion(int turno){
         String turnoDelJugador = Integer.toString(turno+1);
         String[] coordenada = new String[1];
@@ -128,6 +135,7 @@ public class tablero {
         return coordenada;
     }
     
+    //Manda al jugador a su nueva posicion
     public void avanzar(int[] coordenadasDeTurno, int espacios, int jugadorTurno){
         boolean casillaVacia = true;
         int[] coordenadasXY = new int[2];
@@ -172,6 +180,7 @@ public class tablero {
         }
     }
     
+    //Verifica que en la casilla no exista ningun otro elemento
     public boolean casillaVacia(int[] coordenadasXY){
         boolean casillaVacia = false;
         if(matriz[coordenadasXY[0]][coordenadasXY[1]].equals("0")){
@@ -180,6 +189,7 @@ public class tablero {
         return casillaVacia;
     }
     
+    //Elimina la posicion del jugador que se movio unicamente es llamado si el jugador se mueve de su posicion
     public void borrarPosicionAnterior(int[] coordenadasDeTurno, int turno){
         coordenadasDeTurno[0]=10-coordenadasDeTurno[0];
         coordenadasDeTurno[1]=10-coordenadasDeTurno[1];
@@ -205,6 +215,7 @@ public class tablero {
         }
     }
     
+    //Revisa que algun jugador haya ganado
     public boolean finJuego(){
         boolean fin = false;
         if(matriz[0][0].length()>1){
@@ -213,6 +224,7 @@ public class tablero {
         return fin;
     }
     
+    //Si la casilla tiene algun contenido verifica si es serpiente o escalera
     public int verificarContenidoCasilla(int x, int y){
         int contenido=0;
         if(matriz[x][y].equals("4")){
@@ -223,6 +235,7 @@ public class tablero {
         return contenido;
     }
     
+    //Se encarga de realizar todo el procedimiento de mover al jugador y llama a los metodos necesarios 
     public boolean cambio(int[] coordenadasXY, int nuevaX, int nuevaY, int jugadorTurno){
         boolean mismaCasilla = false;
         boolean casillaVacia = casillaVacia(coordenadasXY);

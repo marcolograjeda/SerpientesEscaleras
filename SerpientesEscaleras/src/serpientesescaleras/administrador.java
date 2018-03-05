@@ -11,7 +11,11 @@ import java.util.StringTokenizer;
  * @author Junior
  */
 public class administrador {
-    
+    //Metodo para recibir datos que el usuario ingresa
+    //Caso 1, solo lee numero
+    //Caso 2, lectura y validacion de coordenadas4
+    //Caso 3, revision de opciones
+    //Caso 4, terminar turno o menu
     public String leer(int opcion){
         Scanner scan = new Scanner(System.in);
         String leer = scan.nextLine();
@@ -34,8 +38,10 @@ public class administrador {
                         if((!leer.equals("f"))){
                             if((!leer.equals("F"))){
                                 if(!(leer.equals("p"))){
-                                    System.out.println("Ingrese una de las opciones anteriores");
-                                    leer=leer(3);
+                                    if(!(leer.equals("P"))){
+                                        System.out.println("Ingrese una de las opciones anteriores");
+                                        leer=leer(3);
+                                    }
                                 }
                             }
                         }
@@ -45,8 +51,12 @@ public class administrador {
             case 4:
                 if((!leer.equals("f"))){
                     if(!leer.equals("p")){
-                        System.out.println("Ingrese una de las opciones anteriores");
-                        leer=leer(4);
+                        if((!leer.equals("F"))){
+                            if(!(leer.equals("P"))){
+                                System.out.println("Ingrese una de las opciones anteriores");
+                                leer=leer(4);
+                            }
+                        }
                     }
                 }
                 break;
@@ -54,6 +64,7 @@ public class administrador {
         return leer;
     }
     
+    //Metodo para separa las coordenadas y dejar pares ordenados de x,y
     public String[] separador(String cadena){
         StringTokenizer token = new StringTokenizer(cadena, ";");
         int contadorCoordenadas = token.countTokens();
@@ -64,6 +75,7 @@ public class administrador {
         return coordenadas;
     }
     
+    //Separa las coordenadas dejando a numeros pares la coordenda x y a los impares las coordenadas y
     public int[] separadorComas(String[] coordenada, int opcion){
         int[] coordenadasSeparadasXY = new int[(coordenada.length*2)];
         int posicionVector = 0;
@@ -92,6 +104,7 @@ public class administrador {
         return coordenadasSeparadasXY;
     }
     
+    //Nos da la función de un numero aleatorio en un rango de 1 a 12
     public int dado(){
         int dado = (int)(Math.random()*12)+1;
         return dado;

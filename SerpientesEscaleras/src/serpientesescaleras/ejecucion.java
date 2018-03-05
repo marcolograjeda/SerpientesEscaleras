@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package serpientesescaleras;
-import java.awt.event.KeyEvent;
 
 /**
  *
@@ -16,6 +15,8 @@ public class ejecucion {
     tablero tab = new tablero();
     String[] jugadores = new String[0];
     int ronda = 0;
+    
+    //El menu principal del juego
     public int Menu(){
         System.out.println("Ingresa el numero de la opción que desees\n1 Iniciar Juego.\n2 Renaudar Juego.\n3 Salir.\n\n");
         int opcion = Integer.parseInt(admin.leer(1));
@@ -35,11 +36,16 @@ public class ejecucion {
                 }
                 break;
             case 3:
+                System.out.println("Feliz dia");
                 System.exit(0);
+            default:
+                System.out.println("Escoja una de las opciones anteriores");
+                Menu();
         }
         return opcion;
     }
     
+    //Inicia el juego cuando se selecciona la opcion en el menu
     public void iniciarJuego(){
         jugadores = player.jugadores();
         tab.iniciarMatriz();
@@ -76,6 +82,7 @@ public class ejecucion {
         Menu();
     }
     
+    //Comienza el juego hasta que un jugador llega a la ultima casilla y gana
     public void juego(int jugadorTurno){
         System.out.println("\nEs el turno de " + jugadores[jugadorTurno] + "                          Ronda:" +ronda);
         tab.imprimirMatriz();
@@ -102,6 +109,7 @@ public class ejecucion {
         }
     }
     
+    //Menu auxiliar para las formas de avanzar
     public String formasAvanzar(){
         System.out.println("¿Como desea avanzar?\n1 Con el dado              (Ingrese p para ir al menu o pausar el juego)"
                 +"\n2 Numero fijo              (Ingrese f para finalizar su turno)");
@@ -109,6 +117,7 @@ public class ejecucion {
         return opcion;
     }
     
+    //Muestra y calcula el resultado de un lanzamiento aleatorio
     public int lanzamiento(int opcion){
         int espacios =0;
         switch(opcion){
@@ -127,6 +136,7 @@ public class ejecucion {
         return espacios;
     }
     
+    //Si existe algun error con alguna serpiente o escalera, nos pregunta si se desea ingresar alguna otra nuevamente
     public boolean repetirCoordenadas(String tipo, boolean repetir, boolean problema){
         do{
             problema = tab.llenarMatriz(tipo);
@@ -151,6 +161,7 @@ public class ejecucion {
         return true;
     }
     
+    //Cuenta las rondas que se dan en el juego
     public int contarRonda(int jugadorTurno, int ronda){
         if(jugadorTurno==0){
             ronda++;

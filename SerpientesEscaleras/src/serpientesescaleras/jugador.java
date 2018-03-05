@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 package serpientesescaleras;
-//import java.util.Random;
 /**
  *
  * @author Junior
  */
 public class jugador {
     administrador admin = new administrador();
+    //Llena la lista de los jugadores que participaran en el juego
     public String[] jugadores(){
         int numeroJugadores = numeroJugadores();
         String[] nombresJugadores = new String[numeroJugadores];
@@ -21,6 +21,7 @@ public class jugador {
         return nombresJugadores;
     }
     
+    //Ordena a los jugadores aleatoriamente 
     public String[] turnoRandom(String[] jugadores){
         for(int a=0; a<jugadores.length;a++){
             int posicionRandom = (int)(Math.random()*jugadores.length);
@@ -30,6 +31,8 @@ public class jugador {
         }
         return jugadores;
     }
+    
+    //Maneja los turnos del juego incrementando segun la cantidad de jugadores
     public int manejarTurnos(int turno, String[] jugadores){
         if(jugadores.length==2){
             switch(turno){
@@ -56,6 +59,7 @@ public class jugador {
         return turno;
     }
     
+    //Registro de los jugadores
     public int numeroJugadores(){
         System.out.println("¿Cuantos jugadores van a participar?");
         int numeroJugadores = Integer.parseInt(admin.leer(1));
